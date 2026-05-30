@@ -150,7 +150,15 @@ def scan(current_user):
         return jsonify({'error': 'No image provided'}), 400
 
     image_data = request.json['image']
+    media_type = "image/jpeg"
     if ',' in image_data:
+        header = image_data.split(',')[0]
+        if 'png' in header:
+            media_type = "image/png"
+        elif 'webp' in header:
+            media_type = "image/webp"
+        elif 'gif' in header:
+            media_type = "image/gif"
         image_data = image_data.split(',')[1]
 
     try:
@@ -164,7 +172,7 @@ def scan(current_user):
                         "type": "image",
                         "source": {
                             "type": "base64",
-                            "media_type": "image/jpeg",
+                            "media_type": media_type,
                             "data": image_data
                         }
                     },
